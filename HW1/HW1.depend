@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507018725 source:d:\embedded system\tapit training\iot training\homework\hw1\main.c
+	<stdio.h>
+	<stdlib.h>
+

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Mosquitto test client</title>
+<meta name="description" content="An interactive getting started guide for Bracke
+ts.">
+<script type="text/javascript" src="mqttws31.js"></script>
+<script type="text/javascript">
+// Create a client instance
+client = new Paho.MQTT.Client("localhost", Number(8000), "clientId");
+// set callback handlers
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+// connect the client
+client.connect({onSuccess:onConnect});
+// called when the client connects
+function onConnect()
+{
+    // Once a connection has been made, make a subscription and send a message.
+    console.log("Connected");
+}
+// called when the client loses its connection
+function onConnectionLost(responseObject)
+{
+    if (responseObject.errorCode !== 0)
+    {
+        console.log("onConnectionLost:"+responseObject.errorMessage);
+    }
+}
+// called when a message arrives
+function onMessageArrived(message)
+{
+    console.log("onMessageArrived:"+message.payloadString);
+}
+
+function subscribe()
+{
+    var topicInput = document.getElementById("topicInput").value;
+    client.subscribe(topicInput);
+    console.log("Subcribed to topic: " + topicInput);
+}
+
+function publish()
+{
+    subscribe();
+    var topicInput = document.getElementById("topicInput").value;
+    var messageInput = document.getElementById("messageInput").value;
+    message = new Paho.MQTT.Message(messageInput);
+    message.destinationName = topicInput;
+    client.send(message);
+}
+</script>
+</head>
+<body>
+    Message: <input type="text" id="messageInput"><br>
+    Topic: <input type="text" id="topicInput">
+    <br><br>
+    <button onclick="publish()">Publish</button>
+</body>
+</html>
